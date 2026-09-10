@@ -16,6 +16,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("")
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [maxPrice, setMaxPrice] = useState(1000)
 
   // El fetch está en App (no en ProductList) para poder filtrar antes de renderizar
   useEffect(() => {
@@ -34,14 +35,20 @@ function App() {
   }, [])
 
 //Filtrado de productos, se recalcula automáticamente cada vez que cambia searchTerm o products
-  const filteredProducts = products.filter(product =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProductsSearch = products.filter(product =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase()) //El titulo coincide con lo escrito
+    && product.price <= maxPrice //El precio es menor o igual que el seleccionado
   )
+
 
   return (
     <div>
-      <Filters searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      <ProductList products={filteredProducts} isLoading={isLoading} />
+      <Filters searchTerm={searchTerm}
+       setSearchTerm={setSearchTerm} 
+       maxPrice={maxPrice}
+       setMaxPrice={setMaxPrice}
+       />
+      <ProductList products={filteredProductsSearch} isLoading={isLoading} />
     </div>
   )
 }
